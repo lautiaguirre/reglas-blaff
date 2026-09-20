@@ -9,6 +9,7 @@
   --page-w: 402px;
   --page-h: 4728px;
   --font-display: Hobeaux, "Arial Rounded MT Bold", "Arial Black", system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @font-face {
@@ -109,10 +110,95 @@ small {
   user-select: none;
 }
 
-.rules-render img {
+.rules-render[data-enhanced="true"] {
+  /* Matching surfaces behind fractional SVG edges prevent hairline seams. */
+  background: linear-gradient(to bottom, var(--brown) 3297px, var(--red) 3297px);
+}
+
+.rules-render > img,
+.rules-render > svg {
   width: var(--page-w);
   height: 1182px;
   flex: 0 0 1182px;
+}
+
+/* SVG groups keep the exact print artwork; origins follow each drawn piece. */
+.artwork-motion {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.artwork-motion[data-motion="sign"] {
+  transform-origin: 50% 25%;
+}
+
+.artwork-motion[data-motion="stamp"] {
+  /* The shadow, plate and lettering share one physical pivot. */
+  transform-box: view-box;
+  transform-origin: 201px 192px;
+}
+
+/* Keep the complete HTML text available to assistive technology without
+   showing a second copy through moving, translucent pieces of the artwork. */
+.rules-render[data-enhanced="true"] ~ .panel {
+  opacity: 0;
+}
+
+.artwork-motion[data-motion="rule"] {
+  transform-origin: left center;
+}
+
+/* Reading progress follows native scrolling, without a JavaScript scroll loop.
+   Browsers without scroll timelines simply show the original page. */
+.reading-progress {
+  display: none;
+  position: fixed;
+  z-index: 200;
+  inset: 0 auto auto 50%;
+  width: min(100%, var(--page-w));
+  height: 2px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.reading-progress span {
+  display: block;
+  height: 100%;
+  background: var(--orange);
+  transform-origin: left;
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    display: block;
+  }
+
+  .reading-progress span {
+    animation: reading-progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes reading-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-progress {
+    display: none;
+  }
+}
+
+@media print {
+  .reading-progress {
+    display: none;
+  }
+
+  .artwork-motion {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 .panel {
@@ -992,6 +1078,18 @@ small {
   .rules-page {
     margin: 0;
     zoom: calc(100vw / 402px);
+  }
+}
+
+/* Account for classic scrollbars as well as overlay mobile scrollbars. */
+@supports (width: 1cqw) {
+  body {
+    container-type: inline-size;
+  }
+
+  .rules-page {
+    margin-inline: auto;
+    zoom: min(1, calc(100cqw / 402px));
   }
 }
 
