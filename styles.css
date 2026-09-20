@@ -96,6 +96,25 @@ small {
   box-shadow: 0 0 0 1px rgba(55, 29, 11, 0.05), 0 24px 70px rgba(55, 29, 11, 0.12);
 }
 
+.rules-render {
+  position: absolute;
+  z-index: 100;
+  inset: 0;
+  display: flex;
+  width: var(--page-w);
+  height: var(--page-h);
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.rules-render img {
+  width: var(--page-w);
+  height: 1182px;
+  flex: 0 0 1182px;
+}
+
 .panel {
   position: absolute;
   left: 0;
