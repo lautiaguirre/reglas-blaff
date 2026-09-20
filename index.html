@@ -7,12 +7,59 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="reading-progress" aria-hidden="true">
+      <span></span>
+    </div>
+
     <main class="rules-page" aria-label="Reglas de BLAFF">
       <div class="rules-render" aria-hidden="true">
         <img src="assets/rules-page-1.svg" alt="" draggable="false" fetchpriority="high" />
         <img src="assets/rules-page-2.svg" alt="" draggable="false" />
         <img src="assets/rules-page-3.svg" alt="" draggable="false" />
         <img src="assets/rules-page-4.svg" alt="" draggable="false" />
+      </div>
+
+      <div class="motion-layer" aria-hidden="true">
+        <div class="motion-crop motion-hero" data-motion="hero">
+          <img src="assets/rules-page-1.svg" alt="" draggable="false" />
+        </div>
+
+        <div class="motion-crop motion-note motion-note-left" data-motion="note-left">
+          <img src="assets/rules-page-1.svg" alt="" draggable="false" />
+        </div>
+        <div class="motion-crop motion-note motion-note-right" data-motion="note-right">
+          <img src="assets/rules-page-1.svg" alt="" draggable="false" />
+        </div>
+
+        <div class="motion-crop motion-turn-title" data-motion="title">
+          <img src="assets/rules-page-1.svg" alt="" draggable="false" />
+        </div>
+
+        <div class="motion-crop motion-arrow motion-arrow-left" data-motion="arrow-left">
+          <img src="assets/rules-page-2.svg" alt="" draggable="false" />
+        </div>
+        <div class="motion-crop motion-arrow motion-arrow-right" data-motion="arrow-right">
+          <img src="assets/rules-page-2.svg" alt="" draggable="false" />
+        </div>
+
+        <div class="motion-crop motion-clarifications-title" data-motion="title">
+          <img src="assets/rules-page-2.svg" alt="" draggable="false" />
+        </div>
+
+        <div class="motion-crop motion-joker-arrival" data-motion="joker">
+          <img src="assets/rules-page-3.svg" alt="" draggable="false" />
+        </div>
+
+        <div class="motion-crop motion-how" data-motion="how">
+          <img src="assets/rules-page-4.svg" alt="" draggable="false" />
+        </div>
+
+        <div class="motion-crop motion-arrow motion-joker-arrow-left" data-motion="arrow-left">
+          <img src="assets/rules-page-4.svg" alt="" draggable="false" />
+        </div>
+        <div class="motion-crop motion-arrow motion-joker-arrow-right" data-motion="arrow-right">
+          <img src="assets/rules-page-4.svg" alt="" draggable="false" />
+        </div>
       </div>
 
       <section class="panel panel-cream intro">
@@ -228,5 +275,6 @@
         </article>
       </section>
     </main>
+    <script src="motion.js"></script>
   </body>
 </html>
