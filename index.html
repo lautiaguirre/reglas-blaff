@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BLAFF - Reglas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="rules-page" aria-label="Reglas de BLAFF">
+      <section class="panel panel-cream intro">
+        <div class="logo-stage">
+          <img class="blaff-logo" src="assets/blaff-logo-render.png" alt="BLAFF" />
+          <div class="rules-badge"><span>Reglas</span></div>
+        </div>
+
+        <header class="section-title section-title-dark">
+          <p>Reglas pre partida</p>
+          <h1>Comienzo del juego</h1>
+          <img src="assets/divider-brown.svg" alt="" aria-hidden="true" />
+        </header>
+
+        <div class="copy-block">
+          <p>Cada jugador comienza con:</p>
+          <ul class="start-list" aria-label="Elementos iniciales">
+            <li><img src="assets/bullet-cream-1.svg" alt="" aria-hidden="true" /><strong>1 carta</strong></li>
+            <li>
+              <img src="assets/bullet-cream-2.svg" alt="" aria-hidden="true" />
+              <span><strong>3 dedos levantados.</strong> <small>(4-10 jugadores).</small></span>
+            </li>
+            <li>
+              <img src="assets/bullet-cream-2.svg" alt="" aria-hidden="true" />
+              <span><strong>2 dedos levantados.</strong> <small>(11-20 jugadores).</small></span>
+            </li>
+          </ul>
+        </div>
+
+        <p class="large-copy">
+          Al comienzo de la ronda se da vuelta una <strong>carta de consigna</strong>,
+          que dura toda la partida.
+        </p>
+
+        <div class="notes-row" aria-label="Notas sobre vidas y consignas">
+          <div class="note note-left">
+            <img class="note-shape" src="assets/note-left.svg" alt="" aria-hidden="true" />
+            <div class="fingers" aria-hidden="true">
+              <img src="assets/finger.svg" alt="" />
+              <img src="assets/finger.svg" alt="" />
+              <img src="assets/finger.svg" alt="" />
+            </div>
+            <p>*Cada dedo representa una vida</p>
+          </div>
+          <div class="note note-right">
+            <img class="note-shape" src="assets/note-right.svg" alt="" aria-hidden="true" />
+            <p>*Se pueden utilizar de 1 a 3 consignas</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel-dark turn">
+        <div class="ornament ornament-top" aria-hidden="true">
+          <img src="assets/ornament-cream.svg" alt="" />
+          <img src="assets/ornament-cream.svg" alt="" />
+        </div>
+
+        <header class="section-title section-title-light">
+          <p>Tu turno</p>
+          <h2>Dentro del juego</h2>
+          <img src="assets/divider-cream.svg" alt="" aria-hidden="true" />
+        </header>
+
+        <div class="turn-actions">
+          <p>En tu turno vas a poder:</p>
+          <ul class="image-bullets">
+            <li><img src="assets/bullet-light.svg" alt="" aria-hidden="true" />Hacer la acción de tu carta.</li>
+            <li>
+              <img src="assets/bullet-light.svg" alt="" aria-hidden="true" />
+              Hacer la acción de otra carta <span class="orange">(mentir).</span>
+            </li>
+            <li>
+              <img src="assets/bullet-light.svg" alt="" aria-hidden="true" />
+              Pasar o cambiar tu carta con el mazo.
+            </li>
+          </ul>
+        </div>
+
+        <div class="note note-dark">
+          <img class="note-shape" src="assets/note-dark.svg" alt="" aria-hidden="true" />
+          <p>*Solo se puede hacer una acción por turno</p>
+        </div>
+
+        <article class="distrust">
+          <h3>
+            Si crees que la persona que te atacó <span class="orange">mintió</span>,
+            podés desconfiar.
+          </h3>
+
+          <div class="outcomes">
+            <div class="outcome">
+              <img src="assets/icon-lose.svg" alt="" aria-hidden="true" />
+              <p>
+                Si desconfiás y <strong>tenés razón</strong> (el otro jugador
+                <span class="orange">mintió</span>), él
+                <strong class="pink">pierde una vida.</strong>
+              </p>
+            </div>
+            <div class="outcome">
+              <img src="assets/icon-win.svg" alt="" aria-hidden="true" />
+              <p>
+                Si desconfiás y <strong>no tenés razón</strong> (el otro jugador
+                NO mintió) <strong class="pink">perdés todas tus vidas.</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="summary-block">
+            <p>En resumen:</p>
+            <strong>Si mentís y te agarran <span class="pink">perdés una vida.</span></strong>
+            <strong>Si desconfiás mal, <span class="pink">perdés.</span></strong>
+          </div>
+        </article>
+
+        <p class="winner">El último que queda en pie, gana.</p>
+
+        <div class="ornament ornament-bottom" aria-hidden="true">
+          <img src="assets/ornament-cream.svg" alt="" />
+          <img src="assets/ornament-cream.svg" alt="" />
+        </div>
+      </section>
+
+      <section class="panel panel-dark clarifications">
+        <div class="ornament ornament-top" aria-hidden="true">
+          <img src="assets/ornament-dark.svg" alt="" />
+          <img src="assets/ornament-dark.svg" alt="" />
+        </div>
+
+        <header class="section-title section-title-light">
+          <p>Para distintas situaciones</p>
+          <h2>Aclaraciones</h2>
+          <img src="assets/divider-cream.svg" alt="" aria-hidden="true" />
+        </header>
+
+        <ul class="clarification-list">
+          <li><strong>El límite de vidas es 4.</strong></li>
+          <li>
+            <strong>Cualquier jugador</strong> puede <strong>desconfiar de la médica</strong>,
+            dado que no ataca a nadie.
+          </li>
+          <li>
+            <strong>No</strong> se puede <strong>pasar ni cambiar</strong> la carta con el mazo
+            <strong>dos turno seguidos.</strong>
+          </li>
+          <li>
+            Si te descubren <strong class="orange">mintiendo</strong> con la acción del
+            <strong>seguridad</strong> <strong>perdés 2 vidas</strong>, <small>(una porque te mataron y otra por mentir).</small>
+          </li>
+          <li>
+            Luego de hacer la acción del <strong>ladrón</strong> tenés que
+            <strong>intercambiar tu carta</strong> con el mazo
+            <small>(independientemente de si <span class="orange">mentiste</span> o dijiste la verdad).</small>
+          </li>
+          <li>
+            Si te cambian la carta con la acción de la <strong>comerciante</strong>,
+            tenés que <strong>dejar pasar un turno</strong> para realizar esa acción.
+          </li>
+          <li>
+            Al quedar <strong>1v1</strong>, si se repiten <strong>2 rondas seguidas las mismas acciones</strong>,
+            los jugadores deben <strong>cambiar sus cartas con el mazo.</strong>
+          </li>
+        </ul>
+      </section>
+
+      <section class="panel panel-red joker">
+        <div class="joker-title" aria-label="¿Y el comodín?">
+          <img class="joker-title-a" src="assets/joker-title-a.svg" alt="" aria-hidden="true" />
+          <img class="joker-title-b" src="assets/joker-title-b.svg" alt="" aria-hidden="true" />
+          <h2>
+            <span class="joker-title-outline" aria-hidden="true">¿Y el comodín?</span>
+            <span class="joker-title-fill">¿Y el comodín?</span>
+          </h2>
+        </div>
+
+        <div class="joker-intro">
+          <p>El comodín puede ejecutar <strong>CuaLquiEr AcCióN</strong></p>
+          <img class="joker-face" src="assets/joker-face.svg" alt="" aria-hidden="true" />
+        </div>
+
+        <div class="warning-strip">pero cuidado...</div>
+
+        <article class="joker-warning">
+          <h3>También se puede desconfiar del comodín</h3>
+          <div class="how-title">
+            <strong>¿¿Como??</strong>
+            <span>(din)</span>
+          </div>
+
+          <div class="outcomes joker-outcomes">
+            <div class="outcome">
+              <img src="assets/icon-joker-lose.svg" alt="" aria-hidden="true" />
+              <p>
+                Si desconfías del comodín y <strong>tenés razón</strong>, el dueño del comodín
+                <strong class="blue">queda eliminado</strong>
+              </p>
+            </div>
+            <div class="outcome">
+              <img src="assets/icon-joker-win.svg" alt="" aria-hidden="true" />
+              <p>
+                Si desconfiás y <strong>no tenés razón</strong> vos
+                <strong class="blue">quedás eliminado</strong>
+              </p>
+            </div>
+          </div>
+
+          <div class="summary-block joker-summary">
+            <p>En resumen:</p>
+            <strong>
+              Si descubríste al dueño del comodín, <span class="blue">lo eliminás</span>.
+              Si te equivocaste, <span class="blue">perdés</span>.
+            </strong>
+          </div>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
