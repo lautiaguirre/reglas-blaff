@@ -9,7 +9,8 @@
   --page-w: 402px;
   --page-h: 4728px;
   --font-display: Hobeaux, "Arial Rounded MT Bold", "Arial Black", system-ui, sans-serif;
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* easeOutCubic: a longer visible travel before the final deceleration. */
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 @font-face {
@@ -128,6 +129,22 @@ small {
   transform-origin: center;
 }
 
+.artwork-motion.motion-pending {
+  opacity: 0;
+}
+
+.motion-triggers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.motion-triggers > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+
 .artwork-motion[data-motion="sign"] {
   transform-origin: 50% 25%;
 }
@@ -187,6 +204,10 @@ small {
 @media (prefers-reduced-motion: reduce) {
   .reading-progress {
     display: none;
+  }
+
+  .artwork-motion.motion-pending {
+    opacity: 1;
   }
 }
 

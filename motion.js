@@ -13,27 +13,33 @@
   const scenes = new Map();
   let observer;
   let keyboardScroll = false;
+  let triggers;
+  let resizeFrame = 0;
 
   // Every arrival resolves to the unmodified artwork, with no persistent styles.
   const recipes = {
-    sign: { from: "translateY(-16px) rotate(-3deg) scale(0.96)", duration: 640 },
-    stamp: { from: "translateY(10px) rotate(4deg) scale(0.94)", duration: 460, delay: 90 },
-    heading: { from: "translateY(9px)", duration: 440 },
-    rule: { from: "scaleX(0.35)", duration: 480, delay: 60 },
-    noteLeft: { from: "translateX(-10px) rotate(-3deg)", duration: 420 },
-    noteRight: { from: "translateX(10px) rotate(3deg)", duration: 420, delay: 60 },
-    arrowLeft: { from: "translate(7px, -5px) rotate(-12deg) scale(0.94)", duration: 400 },
-    arrowRight: { from: "translate(-7px, -5px) rotate(12deg) scale(0.94)", duration: 400, delay: 60 },
-    winner: { from: "scale(0.97)", duration: 460 },
-    echoLeft: { from: "translateX(-32px)", duration: 660 },
-    echoRight: { from: "translateX(32px)", duration: 660, delay: 55 },
-    jokerTitle: { from: "translateY(14px) rotate(-2deg) scale(0.97)", duration: 620, delay: 100 },
+    sign: { from: "translateY(-28px) rotate(-6deg) scale(0.93)", duration: 1300 },
+    stamp: { from: "translateY(20px) rotate(8deg) scale(0.92)", duration: 1100, delay: 200 },
+    heading: { from: "translateY(24px) scale(0.97)", duration: 1150 },
+    rule: { from: "scaleX(0.2)", duration: 1100, delay: 180 },
+    noteLeft: { from: "translate(-24px, 14px) rotate(-7deg)", duration: 1200 },
+    noteRight: { from: "translate(24px, 14px) rotate(7deg)", duration: 1200, delay: 120 },
+    arrowLeft: { from: "translate(12px, -12px) rotate(-20deg) scale(0.92)", duration: 1100 },
+    arrowRight: { from: "translate(-12px, -12px) rotate(20deg) scale(0.92)", duration: 1100, delay: 120 },
+    winner: { from: "translateY(14px) scale(0.94)", duration: 1200 },
+    echoLeft: { from: "translate(-64px, -6px) rotate(-4deg)", duration: 1450 },
+    echoRight: { from: "translate(64px, 6px) rotate(4deg)", duration: 1450, delay: 100 },
+    jokerTitle: { from: "translateY(26px) rotate(-4deg) scale(0.94)", duration: 1500, delay: 180 },
     // Both halves of the character use the same translation and start time.
     // Rotation/scale here would introduce a seam between the two SVG pages.
-    character: { from: "translateX(30px)", duration: 700, delay: 60 },
-    warning: { from: "translateX(-18px)", duration: 480 },
-    question: { from: "translateY(6px) scale(0.97)", duration: 400 },
+    character: { from: "translateX(64px)", duration: 1600, delay: 140 },
+    warning: { from: "translateX(-36px) rotate(-3deg)", duration: 1250 },
+    question: { from: "translateY(22px) rotate(-3deg) scale(0.92)", duration: 1200 },
   };
+
+  function reveal(scene) {
+    scene.parts.forEach(({ node }) => node.classList.remove("motion-pending"));
+  }
 
   function settle() {
     active.forEach((animation) => animation.cancel());
@@ -41,33 +47,92 @@
   }
 
   function play(scene) {
-    if (scene.played) return;
+    if (scene.played || document.hidden) return;
     scene.played = true;
     observer.unobserve(scene.trigger);
-    if (reducedMotion.matches || document.hidden || keyboardScroll) return;
+    scene.trigger.dataset.state = "played";
+    if (reducedMotion.matches || keyboardScroll) {
+      reveal(scene);
+      return;
+    }
 
     // Restored scroll positions and fast jumps should land on readable content.
     const bounds = scene.trigger.getBoundingClientRect();
-    if (bounds.bottom <= 0 || bounds.top < -bounds.height / 2) return;
+    if (bounds.bottom <= 0) {
+      reveal(scene);
+      return;
+    }
     const startTime = document.timeline.currentTime;
 
-    scene.parts.forEach(({ node, recipe }) => {
-      const animation = node.animate([
-        { opacity: 0, transform: recipe.from },
-        { opacity: 1, transform: "none" },
-      ], {
-        duration: recipe.duration,
-        delay: recipe.delay || 0,
-        easing: ease,
-        fill: "backwards",
+    try {
+      scene.parts.forEach(({ node, recipe }) => {
+        const animation = node.animate([
+          { opacity: 0, transform: recipe.from },
+          { opacity: 1, transform: "none" },
+        ], {
+          duration: recipe.duration,
+          delay: recipe.delay || 0,
+          easing: ease,
+          fill: "backwards",
+        });
+        animation.startTime = startTime;
+        active.add(animation);
+        animation.finished.then(() => {
+          active.delete(animation);
+          animation.cancel();
+        }, () => active.delete(animation));
       });
-      animation.startTime = startTime;
-      active.add(animation);
-      animation.finished.then(() => {
-        active.delete(animation);
-        animation.cancel();
-      }, () => active.delete(animation));
+    } catch {
+      settle();
+    } finally {
+      // Fill backwards supplies the first frame, including any stagger delay.
+      // Always reveal if the browser rejects an individual animation.
+      reveal(scene);
+    }
+  }
+
+  function observeScenes() {
+    if (!triggers) return;
+    observer?.disconnect();
+    // Percentage root margins use viewport WIDTH. Use visible viewport pixels
+    // so mobile toolbars, rotation and narrow screens share the same trigger.
+    const visibleHeight = window.visualViewport?.height || innerHeight;
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) play(scenes.get(entry.target.dataset.scene));
+      });
+    }, { rootMargin: `0px 0px -${Math.round(visibleHeight * 0.22)}px 0px`, threshold: 0 });
+    scenes.forEach((scene) => {
+      if (scene.played) return;
+      if (scene.trigger.getBoundingClientRect().bottom <= 0 || reducedMotion.matches) {
+        scene.played = true;
+        scene.trigger.dataset.state = "played";
+        reveal(scene);
+      } else {
+        observer.observe(scene.trigger);
+      }
     });
+  }
+
+  function createTriggers(pages) {
+    triggers = document.createElement("div");
+    triggers.className = "motion-triggers";
+    triggers.setAttribute("aria-hidden", "true");
+    scenes.forEach((scene, name) => {
+      const box = scene.trigger.getBBox();
+      const pageIndex = pages.indexOf(scene.trigger.ownerSVGElement);
+      const marker = document.createElement("span");
+      marker.dataset.scene = name;
+      marker.dataset.state = "pending";
+      marker.style.top = `${pageIndex * 1182 + box.y + box.height * 0.4}px`;
+      marker.style.left = `${Math.max(1, Math.min(400, box.x + box.width / 2))}px`;
+      triggers.append(marker);
+      scene.trigger = marker;
+      scene.parts.forEach(({ node }) => node.classList.add("motion-pending"));
+    });
+    // HTML markers are stable across SVG clipping and CSS zoom in mobile
+    // browsers, and their position never changes with the animated artwork.
+    render.parentElement.append(triggers);
   }
 
   function add(svg, id, sceneName, recipeName, trigger = false) {
@@ -161,42 +226,44 @@
         namespaceIds(svg, index);
       }
 
-      observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) play(scenes.get(entry.target.dataset.scene));
-        });
-      }, { rootMargin: "0px 0px 4% 0px", threshold: 0 });
-
       // Swap atomically, only after all artwork and references are ready.
       // The reserved image dimensions and SVG viewBoxes are identical.
       render.replaceChildren(...pages);
-      scenes.forEach((scene, name) => {
-        scene.trigger.dataset.scene = name;
-        const bounds = scene.trigger.getBoundingClientRect();
-        // Give the first viewport one focal entrance. Already visible reading
-        // content (including browser-restored positions) needs no reveal.
-        if (name !== "brand" && bounds.top < innerHeight && bounds.bottom > 0) {
-          scene.played = true;
-          return;
-        }
-        observer.observe(scene.trigger);
-      });
+      createTriggers(pages);
       render.dataset.enhanced = "true";
+      observeScenes();
     } catch {
       settle();
       observer?.disconnect();
+      triggers?.remove();
+      triggers = null;
+      delete render.dataset.enhanced;
       // Network, parsing or browser failure must never hide the rules.
       render.replaceChildren(...images);
     }
   }
 
   reducedMotion.addEventListener("change", () => {
-    if (reducedMotion.matches) settle();
+    if (reducedMotion.matches) {
+      settle();
+      observeScenes();
+    }
   });
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) settle();
+    else observeScenes();
   });
   window.addEventListener("pagehide", settle);
+  window.addEventListener("pageshow", observeScenes);
+  const resize = () => {
+    if (resizeFrame) return;
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = 0;
+      observeScenes();
+    });
+  };
+  window.addEventListener("resize", resize, { passive: true });
+  window.visualViewport?.addEventListener("resize", resize, { passive: true });
   document.addEventListener("keydown", (event) => {
     if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "].includes(event.key)) {
       keyboardScroll = true;
